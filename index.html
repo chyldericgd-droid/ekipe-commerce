@@ -1,384 +1,674 @@
-  <!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekipe 6.1 Commerce - Catalogue</title>
-ß
-    <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzWnBWAigG8ZdyvbnwzxD9NgXy23Yl0Csy5d_xW2QtUDBAEbFxKLbeCwEgylH_an-wZ/exec'; 
-    </script>
-    
-    <style>
-        /* Variables de couleurs minimalistes et fiables */
-        :root {
-            --primary-color: #007aff; /* Bleu Apple */
-            --accent-color: #34c759;  /* Vert de validation */
-            --background-color: #f0f2f5; 
-            --card-bg: rgba(255, 255, 255, 0.7); /* Fond légèrement transparent */
-            --text-dark: #1d1d1f; 
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ekipe 6.1 — Boutique</title>
 
-        body {
-            font-family: 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; 
-            background-color: var(--background-color);
-            color: var(--text-dark);
-            margin: 0;
-            line-height: 1.6;
-        }
-        
-        /* Styles de la Navigation */
-        .nav-bar {
-            display: flex;
-            justify-content: center;
-            background-color: var(--card-bg); 
-            backdrop-filter: blur(8px);
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-            transition: opacity 0.3s, visibility 0.3s, height 0.3s, padding 0.3s; 
-        }
-        .nav-link {
-            color: var(--text-dark);
-            padding: 10px 25px;
-            margin: 0 10px;
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: background-color 0.2s, transform 0.1s;
-            cursor: pointer;
-        }
-        .nav-link:hover {
-            background-color: rgba(0, 122, 255, 0.1); 
-        }
-        .nav-link.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        /* Conteneurs et Formulaires */
-        #content { padding: 40px 20px; }
-        .page-title { text-align: center; margin-bottom: 30px; font-weight: 700; font-size: 2em; }
-        .product-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: var(--shadow-light);
-            border-radius: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; }
-        .product-image-placeholder img { width: 100%; display: block; }
-        .form-container {
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 30px;
-            border-radius: 15px;
-            background: var(--card-bg); 
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
-        /* Styles pour inputs/selects et boutons */
-        label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: 600; color: var(--text-dark); }
-        input[type="text"], input[type="number"], select {
-            width: 100%; padding: 10px 12px; margin-bottom: 10px; box-sizing: border-box; border-radius: 8px; font-size: 16px; font-family: inherit;
-            background-color: rgba(255, 255, 255, 0.8); border: 1px solid #d1d1d6; transition: border-color 0.2s, box-shadow 0.2s;
-            -webkit-appearance: none; -moz-appearance: none; appearance: none;
-        }
-        input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2); background-color: white; }
-        button {
-            background-color: var(--primary-color); color: white; font-size: 1.1em; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer;
-            width: 100%; margin-top: 20px; transition: background-color 0.2s, transform 0.1s;
-        }
-        button:hover { background-color: #005bb5; transform: translateY(-1px); }
-        .price-box {
-            background-color: #e6f7ff; color: var(--primary-color); border-left: 5px solid var(--primary-color); padding: 15px; margin-top: 20px; border-radius: 8px; font-weight: 700;
-        }
-        .response-success { border-color: var(--accent-color); color: var(--accent-color); padding: 10px; margin-top: 20px; border-radius: 8px; background-color: #e8f9ed; border: 1px solid; text-align: center;}
-        .response-error { border-color: #ff3b30; color: #ff3b30; padding: 10px; margin-top: 20px; border-radius: 8px; background-color: #ffe6e6; border: 1px solid; text-align: center;}
-    </style>
+  <!-- CONFIG : adapte si besoin -->
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzWnBWAigG8ZdyvbnwzxD9NgXy23Yl0Csy5d_xW2QtUDBAEbFxKLbeCwEgylH_an-wZ/exec';
+    // Si tu utilises API_TOKEN dans Code.gs, tu peux le remplir ici pour tests locaux.
+    // NE PAS laisser une clé secrète dans un repo public ! Laisser vide pour GitHub Pages publics.
+    const API_TOKEN_IN_CLIENT = ""; // ex: "CLE_TEST_123" (laisser vide si public)
+    const MTN_NUMBER = '064131363';
+    const AIRTEL_NUMBER = '056067092';
+    const FETCH_TIMEOUT_MS = 15000;
+  </script>
+
+  <style>
+    :root {
+      --bg:#f6f7fb;
+      --card:#fff;
+      --muted:#6b7280;
+      --accent:#0b5edd;
+      --accent-dark:#074bb3;
+      --success:#16a34a;
+      --danger:#ef4444;
+      font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:#0f172a}
+    .container{max-width:1100px;margin:28px auto;padding:0 16px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .subtitle{color:var(--muted);font-size:13px}
+
+    .grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 10px 30px rgba(2,6,23,.06);width:320px;cursor:pointer;transition:transform .12s}
+    .card:hover{transform:translateY(-6px)}
+    .thumb{height:180px;border-radius:8px;overflow:hidden;background:#f1f5f9;display:flex;align-items:center;justify-content:center}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .card h3{margin:10px 0 6px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    .form-area{max-width:900px;margin:18px auto;background:rgba(255,255,255,0.98);padding:18px;border-radius:12px;box-shadow:0 18px 40px rgba(2,6,23,.06)}
+    .form-row{display:flex;gap:12px;flex-wrap:wrap}
+    .left{flex:1;min-width:260px}
+    .right{flex:1;min-width:260px}
+
+    label{display:block;margin-top:12px;font-weight:600}
+    input[type="text"], input[type="number"], select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:white;font-size:15px}
+    input:focus, select:focus{outline:none;box-shadow:0 0 0 4px rgba(11,94,221,0.08);border-color:var(--accent)}
+    .price-box{background:#e9f7ff;padding:12px;border-left:4px solid var(--accent);border-radius:8px;font-weight:700;margin-top:12px}
+    .notice{background:#fff7ed;padding:10px;border-left:4px solid #f59e0b;border-radius:8px;margin-top:12px;color:#92400e}
+    .actions{display:flex;gap:12px;margin-top:16px}
+    .btn{flex:1;padding:12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);color:white}
+    .btn.ghost{background:transparent;border:1px solid #e6e9ef}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .message{margin-top:12px;padding:10px;border-radius:8px;text-align:center}
+    .message.success{background:#e8f9ed;color:var(--success);border:1px solid rgba(22,163,74,.12)}
+    .message.error{background:#ffe6e6;color:var(--danger);border:1px solid rgba(255,59,48,.12)}
+
+    .loader{display:inline-block;width:16px;height:16px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--accent);animation:spin .8s linear infinite;vertical-align:middle;margin-left:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,.45);z-index:60}
+    .modal .card{width:480px;max-width:92vw}
+
+    @media (max-width:800px){ .card{width:100%} .form-row{flex-direction:column} }
+  </style>
 </head>
 <body>
-    
-    <div class="nav-bar">
-        <a href="#catalogue" class="nav-link active" onclick="loadPage('Catalogue')">Catalogue</a>
-        <a href="#personnalisation" class="nav-link" onclick="loadPage('Personnalisation')">Personnalisation</a>
-        <a href="#collaboration" class="nav-link" onclick="loadPage('Collaboration')">Collaboration Artiste</a>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Ekipe 6.1 — Boutique</h1>
+        <div class="subtitle">Designs — Personnalisation — Paiement Mobile Money</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:13px;color:var(--muted)">MTN <strong>064131363</strong> • Airtel <strong>056067092</strong></div>
+      </div>
+    </header>
+
+    <!-- Catalogue -->
+    <section class="grid" id="catalogue">
+      <article class="card" role="button" onclick="openDetail('T-Shirt Classique','TS-CL001')">
+        <div class="thumb"><img src="https://via.placeholder.com/640x360?text=Classique" alt="T-Shirt Classique"></div>
+        <h3>T-Shirt Classique</h3>
+        <p>Design épuré, confortable — parfait pour le quotidien.</p>
+      </article>
+
+      <article class="card" role="button" onclick="openDetail('T-Shirt Géométrique','TS-GE002')">
+        <div class="thumb"><img src="https://via.placeholder.com/640x360?text=Géométrique" alt="T-Shirt Géométrique"></div>
+        <h3>T-Shirt Géométrique</h3>
+        <p>Motifs structurés et modernes.</p>
+      </article>
+    </section>
+
+    <!-- Détail + Form -->
+    <main id="detail-area"></main>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="card" role="dialog" aria-modal="true">
+      <h3 id="modal-title">Instructions de paiement</h3>
+      <p id="modal-text" style="color:var(--muted)"></p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn primary" onclick="closeModal()">Fermer</button>
+      </div>
     </div>
+  </div>
 
-    <div id="content">
+<script>
+/* ============ Helpers ============ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const timeoutFetch = (url, opts = {}, ms = FETCH_TIMEOUT_MS) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(url, {...opts, signal: controller.signal}).finally(() => clearTimeout(id));
+};
+
+function showModal(title, text) {
+  $('#modal-title').textContent = title;
+  $('#modal-text').textContent = text;
+  const m = document.getElementById('modal');
+  m.style.display = 'flex';
+  m.setAttribute('aria-hidden','false');
+}
+function closeModal(){
+  const m = document.getElementById('modal');
+  m.style.display = 'none';
+  m.setAttribute('aria-hidden','true');
+}
+
+/* ============ Catalogue -> Detail ============ */
+function openDetail(name, sku) {
+  const area = document.getElementById('detail-area');
+  area.innerHTML = detailHTML();
+  $('#product-name').textContent = name;
+  $('#selected-sku').value = sku;
+  $('#thumb').src = `https://via.placeholder.com/600x360?text=${encodeURIComponent(sku)}`;
+  attachListeners();
+  calculatePrice(); // initial
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function detailHTML(){
+  return `
+    <section class="form-area" aria-live="polite">
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <img id="thumb" src="" alt="Visuel" style="width:100%;border-radius:8px;object-fit:cover">
         </div>
-    
-    <script>
-        
-        // --- 1. FONCTIONS DE RENDU HTML ---
-        
-        function getCatalogueHTML() {
-            return `
-                <div class="page-title">Nos Designs Exclusifs</div>
-                <p style="text-align: center; margin-bottom: 40px;">Sélectionnez un design pour configurer votre commande.</p>
+        <div style="flex:1;min-width:260px">
+          <h2 id="product-name">Produit</h2>
+          <form id="order-form" onsubmit="event.preventDefault(); submitOrder()">
+            <input type="hidden" id="selected-sku" name="sku" value="">
+            <label>Quantité *</label>
+            <input id="qty" type="number" min="1" value="1" required>
 
-                <div class="product-grid">
+            <label>Qualité *</label>
+            <select id="quality" required>
+              <option value="T-Shirt Simple">T-Shirt Simple</option>
+              <option value="T-Shirt Pro">T-Shirt Pro</option>
+              <option value="T-Shirt Max">T-Shirt Max</option>
+            </select>
 
-                    <div class="product-card" onclick="showDetailsPage('T-Shirt Classique', 'TS-CL001')">
-                        <div class="product-image-placeholder">
-                            <img src="https://via.placeholder.com/280x200?text=Design+Classique" alt="T-Shirt Classique">
-                        </div>
-                        <div class="product-info">
-                            <h3>T-Shirt Classique</h3>
-                            <p>Le pilier de notre collection. Simplicité et élégance.</p>
-                        </div>
-                    </div>
+            <label>Fabrication *</label>
+            <select id="fabrication" required>
+              <option value="Standard">Standard (1500F)</option>
+              <option value="Premium">Premium (2000F)</option>
+            </select>
 
-                    <div class="product-card" onclick="showDetailsPage('T-Shirt Géométrique', 'TS-GE002')">
-                        <div class="product-image-placeholder">
-                            <img src="https://via.placeholder.com/280x200?text=Design+Geometrique" alt="T-Shirt Géométrique">
-                        </div>
-                        <div class="product-info">
-                            <h3>T-Shirt Géométrique</h3>
-                            <p>Motifs audacieux et structurés.</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
+            <div class="price-box" id="price-box">Prix de Vente Calculé : —</div>
 
-        function getDetailsHTML() {
-            return `
-                <div class="form-container">
-                    <div id="details-title-container"><h2>VOTRE CHOIX</h2></div>
-                    <form id="commande-form" onsubmit="event.preventDefault(); submitForm()">
-                        
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <img id="design-image" src="" alt="Design sélectionné" style="width: 250px; height: 180px; object-fit: cover; border-radius: 5px;">
-                            <p style="color: var(--primary-color);" id="design-name-display"></p>
-                            <input type="hidden" id="selected-design-id" name="design_id">
-                        </div>
-                        
-                        <div class="form-section">
-                            <h3>1. Configuration de l'Article</h3>
-                            
-                            <label for="quantite">QUANTITÉ DÉSIRÉE *</label>
-                            <input type="number" id="quantite" name="quantite" min="1" value="1" required>
+            <hr style="margin:14px 0">
 
-                            <label for="qualite">QUALITÉ DE T-SHIRT (Définit le prix) *</label>
-                            <select id="qualite" name="qualite" required>
-                                <option value="T-Shirt Simple">Niveau Standard (T-Shirt Simple)</option>
-                                <option value="T-Shirt Pro">Niveau Pro (T-Shirt Pro)</option>
-                                <option value="T-Shirt Max">Niveau Max (T-Shirt Max)</option>
-                            </select>
+            <label>Nom complet *</label>
+            <input id="client-name" type="text" required>
 
-                            <label for="fabrication">OPTION DE FABRICATION & LIVRAISON *</label>
-                            <select id="fabrication" name="fabrication" required>
-                                <option value="Standard">Standard (Délai normal, 1500F + Livraison)</option>
-                                <option value="Premium">Premium (Délai optimisé, 2000F + Livraison)</option>
-                            </select>
-                            
-                            <input type="hidden" id="designe" name="designe" value="Boutique"> 
-                            <p style="color: #666; font-size: 0.9em;">Type de Commande : Client Standard (Catalogue)</p>
-                            
-                            <div id="prix-calcule" class="price-box">Prix de Vente Calculé : 0 FCFA</div>
-                        </div>
-                        
-                        <div class="form-section">
-                            <h3>2. FINALISATION & TRANSFERT</h3>
-                            
-                            <p>Effectuez le paiement Mobile Money **AVANT** de saisir la référence :</p>
-                            <p style="font-weight: bold; color: var(--accent-color); text-align: center;">
-                                MTN : 064131363 | AIRTEL : 056067092
-                            </p>
-                            
-                            <label for="reference">ID DE TRANSACTION (Référence Paiement) *</label>
-                            <input type="text" id="reference" name="reference" placeholder="Format de votre ID" required>
-                            
-                            <label for="nom_client">NOM COMPLET *</label>
-                            <input type="text" id="nom_client" name="nom_client" required>
+            <label>Adresse / Ville *</label>
+            <input id="city" type="text" required placeholder="Ex: Kinshasa / RETRAIT KM4">
 
-                            <label for="ville">ADRESSE DE LIVRAISON *</label>
-                            <input type="text" id="ville" name="ville" required>
-                            
-                            <label for="operateur">OPÉRATEUR MOBILE MONEY *</label>
-                            <select id="operateur" name="operateur">
-                                <option value="MTN Money">MTN Money</option>
-                                <option value="Airtel Money">Airtel Money</option>
-                                <option value="Moov Money">Moov Money</option>
-                                <option value="Autre">Autre</option>
-                            </select>
-                            
-                            <p style="margin-top: 15px; border-left: 3px solid var(--accent-color); padding-left: 10px; font-size: 0.9em;">
-                                *Si vous choisissez **"Retrait KM4"** comme adresse, les frais de livraison seront annulés.
-                            </p>
-                        </div>
-                        
-                        <button type="submit">CONFIRMER & VALIDER LE PAIEMENT</button>
-                    </form>
+            <label>Opérateur MM *</label>
+            <select id="operator" required>
+              <option>MTN Money</option>
+              <option>Airtel Money</option>
+              <option>Moov Money</option>
+              <option>Autre</option>
+            </select>
 
-                    <div id="reponse-serveur" class="response-success" style="display: none;"></div>
-                </div>
-            `;
-        }
+            <label>Référence de transaction *</label>
+            <input id="trx-ref" type="text" placeholder="Ex: TRX12345" required>
 
-        function getEmptyPageHTML(title) {
-            return `<div class="page-title">${title}</div><p style="text-align: center;">Cette section est en cours de construction. Revenez bientôt !</p>`;
-        }
-        
-        // --- 2. LOGIQUE DE NAVIGATION ---
-        
-        function loadPage(pageName) {
-            const contentDiv = document.getElementById('content');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(l => l.classList.remove('active'));
-            document.querySelector(`.nav-link[onclick*='${pageName}']`).classList.add('active');
+            <div class="notice">Effectuez le paiement avant de soumettre la référence. Si vous indiquez "RETRAIT KM4" comme adresse, la livraison sera gratuite.</div>
 
-            if (pageName === 'Catalogue') {
-                contentDiv.innerHTML = getCatalogueHTML();
-            } else if (pageName === 'Details') {
-                // Fait par showDetailsPage()
-            } else if (pageName === 'Personnalisation') {
-                contentDiv.innerHTML = getEmptyPageHTML('Personnalisation de T-Shirt');
-            } else if (pageName === 'Collaboration') {
-                contentDiv.innerHTML = getEmptyPageHTML('Collaboration Artiste');
-            }
-        }
-        
-        function showDetailsPage(productName, designId) {
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = getDetailsHTML(); 
-            
-            // Mise à jour des informations spécifiques
-            document.getElementById('design-name-display').textContent = productName; 
-            document.getElementById('selected-design-id').value = designId;
-            document.getElementById('design-image').src = `https://via.placeholder.com/250x180?text=${designId}`;
-            
-            // Initialise les écouteurs pour les appels API
-            setupPriceCalculations();
-            calculatePrice(); 
-        }
+            <div class="actions">
+              <button type="submit" class="btn primary" id="submit-btn">Confirmer & Envoyer</button>
+              <button type="button" class="btn ghost" onclick="showPayment()">Instructions paiement</button>
+            </div>
 
-        function setupPriceCalculations() {
-            const form = document.getElementById('commande-form');
-            if (form) {
-                // Le calcul doit se faire à chaque changement ou saisie
-                form.quantite.addEventListener('input', calculatePrice);
-                form.qualite.addEventListener('change', calculatePrice);
-                form.fabrication.addEventListener('change', calculatePrice);
-                form.ville.addEventListener('input', calculatePrice); 
-            }
-        }
+            <div id="message" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  `;
+}
 
-        // --- 3. LOGIQUE D'APPEL API (Fetch) ---
+/* ============ Events & API ============ */
+let priceTimer = null;
+function attachListeners(){
+  const form = $('#order-form');
+  if (!form) return;
+  $('#qty').addEventListener('input', debounce(calculatePrice, 300));
+  $('#quality').addEventListener('change', calculatePrice);
+  $('#fabrication').addEventListener('change', calculatePrice);
+  $('#city').addEventListener('input', debounce(calculatePrice, 500));
+}
 
-        /**
-         * Appelle l'API Apps Script pour calculer le prix.
-         */
-        function calculatePrice() {
-            const form = document.getElementById('commande-form');
-            if (!form || !API_URL) return;
-            
-            const quantite = form.quantite.value;
-            const designe = form.designe.value; 
-            const qualite = form.qualite.value;
-            const fabrication = form.fabrication.value;
-            const adresse = form.ville.value; 
+function debounce(fn, ms){
+  return function(...args){
+    clearTimeout(priceTimer);
+    priceTimer = setTimeout(()=>fn.apply(this,args), ms);
+  };
+}
 
-            // Construction de l'URL pour la requête GET
-            const url = new URL(API_URL);
-            url.searchParams.append('action', 'calculatePrice');
-            url.searchParams.append('quantite', quantite);
-            url.searchParams.append('designe', designe);
-            url.searchParams.append('qualite', qualite);
-            url.searchParams.append('fabrication', fabrication);
-            url.searchParams.append('adresse', adresse);
+async function calculatePrice(){
+  try {
+    const qty = $('#qty').value || 1;
+    const designe = 'Boutique'; // catalog default
+    const qual = $('#quality').value;
+    const fab = $('#fabrication').value;
+    const addr = $('#city').value || '';
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const priceDiv = document.getElementById('prix-calcule');
-                    if (data.status === 'success') {
-                        priceDiv.textContent = "Prix de Vente Calculé : " + data.price;
-                    } else {
-                        priceDiv.textContent = "Erreur de calcul : " + (data.message || "API non fonctionnelle.");
-                        console.error("API Error:", data.message);
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('prix-calcule').textContent = "Erreur de connexion API.";
-                    console.error('Fetch Error:', error);
-                });
-        }
-        
-        /**
-         * Appelle l'API Apps Script pour soumettre le formulaire (POST).
-         */
-        function submitForm() {
-            const form = document.getElementById('commande-form');
-            const responseDiv = document.getElementById('reponse-serveur');
-            
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-            
-            // Collecte des données à envoyer
-            const dataToSend = {
-                quantite: form.quantite.value,
-                designe: form.designe.value, 
-                qualite: form.qualite.value,
-                fabrication: form.fabrication.value,
-                reference: form.reference.value,
-                nom_client: form.nom_client.value,
-                ville: form.ville.value, 
-                operateur: form.operateur.value,
-                produit_selectionne: document.getElementById('selected-design-id').value 
-            };
+    const url = new URL(API_URL);
+    url.searchParams.append('action','calculatePrice');
+    url.searchParams.append('quantite', qty);
+    url.searchParams.append('designe', designe);
+    url.searchParams.append('qualite', qual);
+    url.searchParams.append('fabrication', fab);
+    url.searchParams.append('adresse', addr);
 
-            responseDiv.style.display = 'block';
-            responseDiv.className = 'response-success';
-            responseDiv.textContent = "Enregistrement en cours via API, veuillez patienter...";
+    const priceBox = $('#price-box');
+    priceBox.textContent = 'Calcul en cours...';
+    priceBox.insertAdjacentHTML('beforeend',' <span class="loader" id="price-loader"></span>');
 
-            fetch(API_URL, {
-                method: 'POST',
-                mode: 'cors', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataToSend)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    responseDiv.className = 'response-success';
-                    responseDiv.textContent = data.message;
-                    form.reset();
-                    document.getElementById('prix-calcule').textContent = "Prix de Vente Calculé : 0 FCFA";
-                    
-                    setTimeout(() => {
-                        responseDiv.style.display = 'none';
-                        loadPage('Catalogue'); 
-                    }, 3000); 
+    const res = await timeoutFetch(url.toString(), { method: 'GET' }, FETCH_TIMEOUT_MS);
+    const json = await res.json();
 
-                } else {
-                    responseDiv.className = 'response-error';
-                    responseDiv.textContent = "❌ Erreur d'enregistrement : " + data.message;
-                }
-            })
-            .catch(error => {
-                responseDiv.className = 'response-error';
-                responseDiv.textContent = "❌ Erreur de connexion au serveur.";
-                console.error('Submit Fetch Error:', error);
-            });
-        }
-        
-        // --- DÉMARRAGE ---
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPage('Catalogue'); 
-        });
-    </script>
+    const loader = $('#price-loader');
+    if (loader) loader.remove();
+
+    if (json && json.status === 'success') {
+      priceBox.textContent = 'Prix de Vente Calculé : ' + json.price;
+    } else {
+      priceBox.textContent = 'Erreur de calcul : ' + (json && json.message ? json.message : 'API indisponible');
+    }
+  } catch (err) {
+    const loader = $('#price-loader');
+    if (loader) loader.remove();
+    $('#price-box').textContent = 'Erreur de connexion au serveur';
+    console.error('calculatePrice error', err);
+  }
+}
+
+async function submitOrder(){
+  const btn = $('#submit-btn');
+  const messageEl = $('#message');
+  const form = $('#order-form');
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // build payload
+  const payload = {
+    token: API_TOKEN_IN_CLIENT || undefined,
+    quantite: Number($('#qty').value) || 1,
+    designe: 'Boutique',
+    qualite: $('#quality').value,
+    fabrication: $('#fabrication').value,
+    ville: ($('#city').value || '').trim(),
+    produit_selectionne: $('#selected-sku').value || '',
+    nom_client: ($('#client-name').value || '').trim(),
+    operateur: $('#operator').value,
+    reference: ($('#trx-ref').value || '').trim()
+  };
+
+  // UI feedback
+  btn.disabled = true;
+  messageEl.innerHTML = '<div class="message" style="background:#f0f7ff;color:var(--accent)">Enregistrement en cours... <span class="loader"></span></div>';
+
+  try {
+    const res = await timeoutFetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }, FETCH_TIMEOUT_MS);
+
+    const json = await res.json();
+    if (json && json.status === 'success') {
+      messageEl.innerHTML = `<div class="message success">${escapeHtml(json.message || 'Commande enregistrée avec succès')}</div>`;
+      form.reset();
+      $('#price-box').textContent = 'Prix de Vente Calculé : —';
+      // show modal with payment reminder
+      showModal('Commande enregistrée', `Merci — votre commande a été enregistrée.\n\nSi vous n'avez pas encore payé, envoyez le montant au numéro MTN: ${MTN_NUMBER} ou Airtel: ${AIRTEL_NUMBER} puis collez la référence reçue.`);
+      setTimeout(()=>{ messageEl.innerHTML = ''; }, 6000);
+    } else {
+      messageEl.innerHTML = `<div class="message error">Erreur : ${escapeHtml(json && json.message ? json.message : 'Échec d\'enregistrement')}</div>`;
+      console.error('API error', json);
+    }
+  } catch (err) {
+    messageEl.innerHTML = `<div class="message error">Erreur de connexion au serveur. Réessayez.</div>`;
+    console.error('submit error', err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* ============ Helpers ============ */
+function showPayment(){
+  showModal('Instructions paiement', `1) Envoyez le montant au numéro choisi.\n\nMTN: ${MTN_NUMBER}\nAirtel: ${AIRTEL_NUMBER}\n\n2) Après le paiement, copiez la référence reçue dans le champ "Référence de transaction" puis confirmez.`);
+}
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ============ Init ============ */
+document.addEventListener('DOMContentLoaded', ()=> {
+  // nothing: user navigates via catalogue cards
+});
+</script>
+</body>
+</html>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ekipe 6.1 — Boutique</title>
+
+  <!-- CONFIG : adapte si besoin -->
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzWnBWAigG8ZdyvbnwzxD9NgXy23Yl0Csy5d_xW2QtUDBAEbFxKLbeCwEgylH_an-wZ/exec';
+    // Si tu utilises API_TOKEN dans Code.gs, tu peux le remplir ici pour tests locaux.
+    // NE PAS laisser une clé secrète dans un repo public ! Laisser vide pour GitHub Pages publics.
+    const API_TOKEN_IN_CLIENT = ""; // ex: "CLE_TEST_123" (laisser vide si public)
+    const MTN_NUMBER = '064131363';
+    const AIRTEL_NUMBER = '056067092';
+    const FETCH_TIMEOUT_MS = 15000;
+  </script>
+
+  <style>
+    :root {
+      --bg:#f6f7fb;
+      --card:#fff;
+      --muted:#6b7280;
+      --accent:#0b5edd;
+      --accent-dark:#074bb3;
+      --success:#16a34a;
+      --danger:#ef4444;
+      font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:#0f172a}
+    .container{max-width:1100px;margin:28px auto;padding:0 16px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .subtitle{color:var(--muted);font-size:13px}
+
+    .grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 10px 30px rgba(2,6,23,.06);width:320px;cursor:pointer;transition:transform .12s}
+    .card:hover{transform:translateY(-6px)}
+    .thumb{height:180px;border-radius:8px;overflow:hidden;background:#f1f5f9;display:flex;align-items:center;justify-content:center}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .card h3{margin:10px 0 6px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    .form-area{max-width:900px;margin:18px auto;background:rgba(255,255,255,0.98);padding:18px;border-radius:12px;box-shadow:0 18px 40px rgba(2,6,23,.06)}
+    .form-row{display:flex;gap:12px;flex-wrap:wrap}
+    .left{flex:1;min-width:260px}
+    .right{flex:1;min-width:260px}
+
+    label{display:block;margin-top:12px;font-weight:600}
+    input[type="text"], input[type="number"], select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:white;font-size:15px}
+    input:focus, select:focus{outline:none;box-shadow:0 0 0 4px rgba(11,94,221,0.08);border-color:var(--accent)}
+    .price-box{background:#e9f7ff;padding:12px;border-left:4px solid var(--accent);border-radius:8px;font-weight:700;margin-top:12px}
+    .notice{background:#fff7ed;padding:10px;border-left:4px solid #f59e0b;border-radius:8px;margin-top:12px;color:#92400e}
+    .actions{display:flex;gap:12px;margin-top:16px}
+    .btn{flex:1;padding:12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);color:white}
+    .btn.ghost{background:transparent;border:1px solid #e6e9ef}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .message{margin-top:12px;padding:10px;border-radius:8px;text-align:center}
+    .message.success{background:#e8f9ed;color:var(--success);border:1px solid rgba(22,163,74,.12)}
+    .message.error{background:#ffe6e6;color:var(--danger);border:1px solid rgba(255,59,48,.12)}
+
+    .loader{display:inline-block;width:16px;height:16px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--accent);animation:spin .8s linear infinite;vertical-align:middle;margin-left:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,.45);z-index:60}
+    .modal .card{width:480px;max-width:92vw}
+
+    @media (max-width:800px){ .card{width:100%} .form-row{flex-direction:column} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Ekipe 6.1 — Boutique</h1>
+        <div class="subtitle">Designs — Personnalisation — Paiement Mobile Money</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:13px;color:var(--muted)">MTN <strong>064131363</strong> • Airtel <strong>056067092</strong></div>
+      </div>
+    </header>
+
+    <!-- Catalogue -->
+    <section class="grid" id="catalogue">
+      <article class="card" role="button" onclick="openDetail('T-Shirt Classique','TS-CL001')">
+        <div class="thumb"><img src="https://via.placeholder.com/640x360?text=Classique" alt="T-Shirt Classique"></div>
+        <h3>T-Shirt Classique</h3>
+        <p>Design épuré, confortable — parfait pour le quotidien.</p>
+      </article>
+
+      <article class="card" role="button" onclick="openDetail('T-Shirt Géométrique','TS-GE002')">
+        <div class="thumb"><img src="https://via.placeholder.com/640x360?text=Géométrique" alt="T-Shirt Géométrique"></div>
+        <h3>T-Shirt Géométrique</h3>
+        <p>Motifs structurés et modernes.</p>
+      </article>
+    </section>
+
+    <!-- Détail + Form -->
+    <main id="detail-area"></main>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="card" role="dialog" aria-modal="true">
+      <h3 id="modal-title">Instructions de paiement</h3>
+      <p id="modal-text" style="color:var(--muted)"></p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn primary" onclick="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ============ Helpers ============ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const timeoutFetch = (url, opts = {}, ms = FETCH_TIMEOUT_MS) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(url, {...opts, signal: controller.signal}).finally(() => clearTimeout(id));
+};
+
+function showModal(title, text) {
+  $('#modal-title').textContent = title;
+  $('#modal-text').textContent = text;
+  const m = document.getElementById('modal');
+  m.style.display = 'flex';
+  m.setAttribute('aria-hidden','false');
+}
+function closeModal(){
+  const m = document.getElementById('modal');
+  m.style.display = 'none';
+  m.setAttribute('aria-hidden','true');
+}
+
+/* ============ Catalogue -> Detail ============ */
+function openDetail(name, sku) {
+  const area = document.getElementById('detail-area');
+  area.innerHTML = detailHTML();
+  $('#product-name').textContent = name;
+  $('#selected-sku').value = sku;
+  $('#thumb').src = `https://via.placeholder.com/600x360?text=${encodeURIComponent(sku)}`;
+  attachListeners();
+  calculatePrice(); // initial
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function detailHTML(){
+  return `
+    <section class="form-area" aria-live="polite">
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <img id="thumb" src="" alt="Visuel" style="width:100%;border-radius:8px;object-fit:cover">
+        </div>
+        <div style="flex:1;min-width:260px">
+          <h2 id="product-name">Produit</h2>
+          <form id="order-form" onsubmit="event.preventDefault(); submitOrder()">
+            <input type="hidden" id="selected-sku" name="sku" value="">
+            <label>Quantité *</label>
+            <input id="qty" type="number" min="1" value="1" required>
+
+            <label>Qualité *</label>
+            <select id="quality" required>
+              <option value="T-Shirt Simple">T-Shirt Simple</option>
+              <option value="T-Shirt Pro">T-Shirt Pro</option>
+              <option value="T-Shirt Max">T-Shirt Max</option>
+            </select>
+
+            <label>Fabrication *</label>
+            <select id="fabrication" required>
+              <option value="Standard">Standard (1500F)</option>
+              <option value="Premium">Premium (2000F)</option>
+            </select>
+
+            <div class="price-box" id="price-box">Prix de Vente Calculé : —</div>
+
+            <hr style="margin:14px 0">
+
+            <label>Nom complet *</label>
+            <input id="client-name" type="text" required>
+
+            <label>Adresse / Ville *</label>
+            <input id="city" type="text" required placeholder="Ex: Kinshasa / RETRAIT KM4">
+
+            <label>Opérateur MM *</label>
+            <select id="operator" required>
+              <option>MTN Money</option>
+              <option>Airtel Money</option>
+              <option>Moov Money</option>
+              <option>Autre</option>
+            </select>
+
+            <label>Référence de transaction *</label>
+            <input id="trx-ref" type="text" placeholder="Ex: TRX12345" required>
+
+            <div class="notice">Effectuez le paiement avant de soumettre la référence. Si vous indiquez "RETRAIT KM4" comme adresse, la livraison sera gratuite.</div>
+
+            <div class="actions">
+              <button type="submit" class="btn primary" id="submit-btn">Confirmer & Envoyer</button>
+              <button type="button" class="btn ghost" onclick="showPayment()">Instructions paiement</button>
+            </div>
+
+            <div id="message" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+/* ============ Events & API ============ */
+let priceTimer = null;
+function attachListeners(){
+  const form = $('#order-form');
+  if (!form) return;
+  $('#qty').addEventListener('input', debounce(calculatePrice, 300));
+  $('#quality').addEventListener('change', calculatePrice);
+  $('#fabrication').addEventListener('change', calculatePrice);
+  $('#city').addEventListener('input', debounce(calculatePrice, 500));
+}
+
+function debounce(fn, ms){
+  return function(...args){
+    clearTimeout(priceTimer);
+    priceTimer = setTimeout(()=>fn.apply(this,args), ms);
+  };
+}
+
+async function calculatePrice(){
+  try {
+    const qty = $('#qty').value || 1;
+    const designe = 'Boutique'; // catalog default
+    const qual = $('#quality').value;
+    const fab = $('#fabrication').value;
+    const addr = $('#city').value || '';
+
+    const url = new URL(API_URL);
+    url.searchParams.append('action','calculatePrice');
+    url.searchParams.append('quantite', qty);
+    url.searchParams.append('designe', designe);
+    url.searchParams.append('qualite', qual);
+    url.searchParams.append('fabrication', fab);
+    url.searchParams.append('adresse', addr);
+
+    const priceBox = $('#price-box');
+    priceBox.textContent = 'Calcul en cours...';
+    priceBox.insertAdjacentHTML('beforeend',' <span class="loader" id="price-loader"></span>');
+
+    const res = await timeoutFetch(url.toString(), { method: 'GET' }, FETCH_TIMEOUT_MS);
+    const json = await res.json();
+
+    const loader = $('#price-loader');
+    if (loader) loader.remove();
+
+    if (json && json.status === 'success') {
+      priceBox.textContent = 'Prix de Vente Calculé : ' + json.price;
+    } else {
+      priceBox.textContent = 'Erreur de calcul : ' + (json && json.message ? json.message : 'API indisponible');
+    }
+  } catch (err) {
+    const loader = $('#price-loader');
+    if (loader) loader.remove();
+    $('#price-box').textContent = 'Erreur de connexion au serveur';
+    console.error('calculatePrice error', err);
+  }
+}
+
+async function submitOrder(){
+  const btn = $('#submit-btn');
+  const messageEl = $('#message');
+  const form = $('#order-form');
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // build payload
+  const payload = {
+    token: API_TOKEN_IN_CLIENT || undefined,
+    quantite: Number($('#qty').value) || 1,
+    designe: 'Boutique',
+    qualite: $('#quality').value,
+    fabrication: $('#fabrication').value,
+    ville: ($('#city').value || '').trim(),
+    produit_selectionne: $('#selected-sku').value || '',
+    nom_client: ($('#client-name').value || '').trim(),
+    operateur: $('#operator').value,
+    reference: ($('#trx-ref').value || '').trim()
+  };
+
+  // UI feedback
+  btn.disabled = true;
+  messageEl.innerHTML = '<div class="message" style="background:#f0f7ff;color:var(--accent)">Enregistrement en cours... <span class="loader"></span></div>';
+
+  try {
+    const res = await timeoutFetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }, FETCH_TIMEOUT_MS);
+
+    const json = await res.json();
+    if (json && json.status === 'success') {
+      messageEl.innerHTML = `<div class="message success">${escapeHtml(json.message || 'Commande enregistrée avec succès')}</div>`;
+      form.reset();
+      $('#price-box').textContent = 'Prix de Vente Calculé : —';
+      // show modal with payment reminder
+      showModal('Commande enregistrée', `Merci — votre commande a été enregistrée.\n\nSi vous n'avez pas encore payé, envoyez le montant au numéro MTN: ${MTN_NUMBER} ou Airtel: ${AIRTEL_NUMBER} puis collez la référence reçue.`);
+      setTimeout(()=>{ messageEl.innerHTML = ''; }, 6000);
+    } else {
+      messageEl.innerHTML = `<div class="message error">Erreur : ${escapeHtml(json && json.message ? json.message : 'Échec d\'enregistrement')}</div>`;
+      console.error('API error', json);
+    }
+  } catch (err) {
+    messageEl.innerHTML = `<div class="message error">Erreur de connexion au serveur. Réessayez.</div>`;
+    console.error('submit error', err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* ============ Helpers ============ */
+function showPayment(){
+  showModal('Instructions paiement', `1) Envoyez le montant au numéro choisi.\n\nMTN: ${MTN_NUMBER}\nAirtel: ${AIRTEL_NUMBER}\n\n2) Après le paiement, copiez la référence reçue dans le champ "Référence de transaction" puis confirmez.`);
+}
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ============ Init ============ */
+document.addEventListener('DOMContentLoaded', ()=> {
+  // nothing: user navigates via catalogue cards
+});
+</script>
 </body>
 </html>
